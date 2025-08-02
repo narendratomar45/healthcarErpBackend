@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
-const appointmentSchema = new mongoose(
+const appointmentSchema = new mongoose.Schema(
   {
     patient: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Patient",
+      ref: "patient",
       required: true,
     },
     doctor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Doctor",
+      ref: "doctor",
       required: true,
     },
     date: { type: Date, required: true },

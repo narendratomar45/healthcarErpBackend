@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { createAddress } from "../utils/createAddress.js";
+import APIError from "../utils/APIError.js";
 dotenv.config();
 
 const createUser = asyncHandler(async (req, res) => {
@@ -35,16 +36,12 @@ const createUser = asyncHandler(async (req, res) => {
     !state ||
     !zipCode
   ) {
-    return res
-      .status(400)
-      .json({ status: "Failed", message: "All fields are required" });
+    throw new APIError("Email and Password are required", 400);
   }
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
-    return res
-      .status(400)
-      .json({ status: "Failed", message: "User is already registered " });
+    throw new APIError("User is already registered", 400);
   }
   let addresses = await createAddress({
     street,
@@ -74,9 +71,7 @@ const createUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res
-      .status(400)
-      .json({ statu: "failed", message: "Email and Password are required" });
+    throw new APIError("Email and Password are required", 400);
   }
   const user = await User.findOne({ email });
   if (!user) {

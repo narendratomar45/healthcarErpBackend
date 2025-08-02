@@ -10,9 +10,7 @@ export const createNurse = asyncHandler(async (req, res) => {
   }
   const { department, shift, address } = req.body;
   if (!department || !shift || !address) {
-    return res
-      .status(400)
-      .json({ status: "Failed", message: "All Fields are required" });
+    throw new APIError("Email and Password are required", 400);
   }
   const existNurse = await Nurse.findOne({ user: userId });
   if (existNurse) {
