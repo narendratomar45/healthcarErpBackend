@@ -7,6 +7,20 @@ import { createAddress } from "../utils/createAddress.js";
 import APIError from "../utils/APIError.js";
 dotenv.config();
 
+const generateRefreshToken = (user) => {
+  return jwt.sign(
+    { userId: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+};
+
+const generateAccessToken = (user) => {
+  return jwt.sign({ userId: user_id }, process.env.process.env.JWT_SECRET, {
+    expiresIn: "15min",
+  });
+};
+
 const createUser = asyncHandler(async (req, res) => {
   const {
     fullName,
@@ -74,10 +88,8 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new APIError("Email and Password are required", 400);
   }
   const user = await User.findOne({ email });
-  if (!user) {
-    return res
-      .status(401)
-      .json({ status: "Failed", message: "Invalid Credentials" });
+  if (!user || !(await user.comparePassword(password))) {
+    throw new APIError("Invalid Credentials", 401);
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {

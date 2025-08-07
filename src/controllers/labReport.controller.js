@@ -1,5 +1,5 @@
 import LabReport from "../models/labReport.model.js";
-import APIError from "../utils/ApiError.js";
+import APIError from "../utils/APIError.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
 import mongoose from "mongoose";
 

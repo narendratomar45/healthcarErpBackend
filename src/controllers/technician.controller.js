@@ -104,5 +104,3 @@ export const deleteTechnician = asyncHandler(async (req, res) => {
     message: "Technician deleted successfully",
   });
 });
-
-

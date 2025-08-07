@@ -97,6 +97,10 @@ userSchema.methods.toJSON = function () {
   delete userObject.password;
   return userObject;
 };
+userSchema.methods.comparePassword = async function (enterPassword) {
+  const user = this;
+  return await bcrypt.compare(enterPassword, user.password);
+};
 
 const User = mongoose.model("User", userSchema);
 export default User;
